@@ -7,7 +7,7 @@ It applies the **Frame² model**:
 
 check in → get your frame → reset → learn your pattern
 
-Instead of reacting after emotions escalate, frame2mental helps identify the **mechanisms behind emotional patterns** sooner.
+Instead of reacting after emotions escalate, frame²mental helps identify the **mechanisms behind emotional patterns** sooner.
 
 ---
 
@@ -140,7 +140,7 @@ http://localhost:8501
 
 # Philosophy
 
-frame2mental is built on a simple idea:
+frame²mental is built on a simple idea:
 
 Emotional patterns usually appear **before emotional crises**.
 
@@ -161,6 +161,11 @@ Future improvements may include:
 
 ---
 
+i will be using this every day going forward, it's like my personal therapist.
+
+the truth lies in signal, not noise.
+
+-ian
 # License
 
 MIT License
