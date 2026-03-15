@@ -1,7 +1,7 @@
 
-# frame2mental
+# frame²mental
 
-frame2mental is a lightweight mental awareness app built with **Streamlit** that helps users recognize emotional patterns early and respond with clarity.
+frame²mental is a lightweight mental awareness app built with **Streamlit** that helps users recognize emotional patterns early and respond with clarity.
 
 It applies the **Frame² model**:
 
