@@ -1,5 +1,8 @@
-
 # frame²mental
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
+
+> **Not medical advice.** frame²mental is a personal self-awareness tool, not a diagnostic tool and not a substitute for professional care. If you are in crisis in the US, call or text **988** (Suicide & Crisis Lifeline). If you are in immediate danger, call 911.
 
 frame²mental is a lightweight mental awareness app built with **Streamlit** that helps users recognize emotional patterns early and respond with clarity.
 
@@ -126,7 +129,7 @@ frame2mental
 # Run Locally
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/frame2mental.git
+git clone https://github.com/dualityframework-ux/frame2mental.git
 cd frame2mental
 pip install -r requirements.txt
 streamlit run app.py
@@ -161,11 +164,12 @@ Future improvements may include:
 
 ---
 
-i will be using this every day going forward, it's like my personal therapist.
+# Privacy
 
-the truth lies in signal, not noise.
+Check-ins and settings are stored locally in `checkins.json` and `settings.json` on the machine running the app. Both files are git-ignored, and nothing is sent anywhere.
 
--ian
+---
+
 # License
 
-MIT License
+MIT — see [LICENSE](LICENSE).
