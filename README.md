@@ -132,8 +132,10 @@ frame2mental
 ```bash
 git clone https://github.com/dualityframework-ux/frame2mental.git
 cd frame2mental
-pip install -r requirements.txt
-streamlit run app.py
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m streamlit run app.py
 ```
 
 Then open:
@@ -168,20 +170,52 @@ Future improvements may include:
 # Tests
 
 ```bash
-pip install pytest
-pytest -q
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
 ```
 
-34 tests cover every frame branch, the three tones (including that the direct tone stays grammatical), the warning score and levels, early-warning trends, weekly and pattern summaries, journal keywords, reset plans, check-in and settings storage, and that the 988 crisis line is always listed. GitHub Actions runs them on every push.
+The tests cover every frame branch, the three tones (including that the direct tone stays grammatical), the warning score and levels, early-warning trends, weekly and pattern summaries, journal keywords, reset plans, check-in and settings storage, and that the 988 crisis line is always listed. GitHub Actions runs them on every push.
 
 ---
 
 # Privacy
 
-Check-ins and settings are stored locally in `checkins.json` and `settings.json` on the machine running the app. Both files are git-ignored, and nothing is sent anywhere.
+Check-ins and settings are stored locally in `checkins.json` and `settings.json` on the machine running the app. The data files, previous-version backups, locks and temporary files are git-ignored. Check-in data is not uploaded by the app.
 
 ---
 
 # License
 
 MIT — see [LICENSE](LICENSE).
+
+## Reliable local storage
+
+On macOS and Linux, the default data folder is the application directory,
+independent of the directory from which you launch it. Set
+`FRAME2MENTAL_DATA_DIR` to choose a private folder before starting the app:
+
+```bash
+FRAME2MENTAL_DATA_DIR="$HOME/.frame2mental" python -m streamlit run app.py --server.address 127.0.0.1
+```
+
+Existing project-local data stays in place. Choosing another folder does not move
+or delete it. Copy existing data deliberately if you want to migrate it.
+
+Writes validate the document, use an exclusive file lock and atomic replacement,
+and retain the previous valid document as `checkins.json.bak` or
+`settings.json.bak`. Newly written files and backups have owner-only permissions.
+Appending a check-in reloads the latest history under the lock, so independently
+open sessions do not overwrite one another's new entries. Settings and explicit
+history replacement still use the latest completed save; this is a personal tool,
+not an account-based multi-user service.
+
+Malformed or invalid files stop the app with a recovery message instead of silently
+appearing as empty history. Failed writes do not update session history or report
+success. Preserve the original file, review a copy of the `.bak` if available, and
+restore only after confirming its contents. A backup is the previous version,
+not a full version history; the files remain unencrypted local JSON.
+
+The saved reminder time is a preference; this app does not schedule notifications.
+The local launcher uses an existing environment and binds to localhost rather
+than installing dependencies on every launch. Run the engine, persistence and
+Streamlit UI tests with `python -m pytest -q`.

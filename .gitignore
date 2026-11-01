@@ -5,3 +5,10 @@ venv/
 checkins.json
 settings.json
 .pytest_cache/
+
+.venv/
+checkins.json.bak
+settings.json.bak
+*.json.lock
+.checkins.json*
+.settings.json*

@@ -8,6 +8,7 @@ from renderers import (
     render_support_tab,
     render_tools_tab,
 )
+from json_store import DATA_DIR, StorageError
 from settings import load_settings
 from storage import load_checkins
 from styles import apply_styles
@@ -21,11 +22,15 @@ def main():
     st.title("frame2mental")
     st.caption("check in → get your frame → reset → learn your pattern")
 
-    if "checkins" not in st.session_state:
-        st.session_state.checkins = load_checkins()
-
-    if "settings" not in st.session_state:
-        st.session_state.settings = load_settings()
+    try:
+        if "checkins" not in st.session_state:
+            st.session_state.checkins = load_checkins()
+        if "settings" not in st.session_state:
+            st.session_state.settings = load_settings()
+    except StorageError as exc:
+        st.error(str(exc))
+        st.info(f"Data folder: {DATA_DIR}. Keep the original file. If a valid .bak exists, copy it to a separate location and review it before restoring.")
+        st.stop()
 
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
         [
