@@ -16,7 +16,8 @@ from engine import (
     get_mood_style,
     get_warning_level,
 )
-from storage import save_checkins
+from storage import append_checkin, save_checkins
+from json_store import StorageError
 
 
 def render_checkin_tab():
@@ -56,18 +57,26 @@ def render_checkin_tab():
             "energy": energy,
             "note": note,
         }
-        st.session_state.checkins.append(checkin)
-        save_checkins(st.session_state.checkins)
-        st.success("check-in saved")
+        try:
+            saved = append_checkin(checkin)
+        except StorageError as exc:
+            st.error(str(exc))
+        else:
+            st.session_state.checkins = saved
+            st.success("check-in saved")
 
     if st.session_state.checkins:
         st.markdown("### latest check-in")
         st.json(st.session_state.checkins[-1])
 
         if st.button("clear all check-ins", use_container_width=True):
-            st.session_state.checkins = []
-            save_checkins([])
-            st.warning("all check-ins cleared")
+            try:
+                saved = save_checkins([])
+            except StorageError as exc:
+                st.error(str(exc))
+            else:
+                st.session_state.checkins = saved
+                st.warning("all check-ins cleared")
 
 
 def render_frame_tab():
@@ -249,12 +258,17 @@ def render_settings_tab():
         value=settings.get("daily_reminder", "09:00"),
     )
 
-if st.button("save settings", use_container_width=True):
-    st.session_state.settings = {
-        "name": name,
-        "preferred_tone": preferred_tone,
-        "focus_area": focus_area,
-        "daily_reminder": daily_reminder,
-    }
-    save_settings(st.session_state.settings)
-    st.success("settings saved")
+    if st.button("save settings", use_container_width=True):
+        updated = {
+            "name": name,
+            "preferred_tone": preferred_tone,
+            "focus_area": focus_area,
+            "daily_reminder": daily_reminder,
+        }
+        try:
+            saved = save_settings(updated)
+        except StorageError as exc:
+            st.error(str(exc))
+        else:
+            st.session_state.settings = saved
+            st.success("settings saved")

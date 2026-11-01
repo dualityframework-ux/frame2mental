@@ -173,15 +173,19 @@ def test_crisis_resources_include_988():
 def test_checkins_round_trip(tmp_path, monkeypatch):
     monkeypatch.setattr(storage, "DATA_FILE", tmp_path / "checkins.json")
     assert storage.load_checkins() == []
-    storage.save_checkins([STEADY])
-    assert storage.load_checkins() == [STEADY]
+    checkin = {**STEADY, "date": "2026-10-31 09:00"}
+    storage.save_checkins([checkin])
+    assert storage.load_checkins() == [checkin]
 
 
-def test_corrupt_checkins_file_returns_empty(tmp_path, monkeypatch):
+def test_corrupt_checkins_file_is_preserved_and_reported(tmp_path, monkeypatch):
     f = tmp_path / "checkins.json"
     f.write_text("{not json")
     monkeypatch.setattr(storage, "DATA_FILE", f)
-    assert storage.load_checkins() == []
+    from json_store import StorageError
+    with pytest.raises(StorageError):
+        storage.load_checkins()
+    assert f.read_text() == "{not json"
 
 
 def test_settings_fill_in_defaults(tmp_path, monkeypatch):
