@@ -1,3 +1,5 @@
+import re
+
 def build_frame(checkin: dict) -> dict:
     mood = checkin["mood"]
     stress = checkin["stress"]
@@ -139,14 +141,30 @@ def get_mood_style(mood: int) -> dict:
         "bg": "linear-gradient(135deg, #425b52, #2d3d37)",
     }
 
+# Direct tone drops hedging but keeps the sentence grammatical: "may be" becomes "is" or "are", not nothing.
+_DIRECT_PHRASES = [
+    (r"\byou may be\b", "you are"),
+    (r"\bpressure and fatigue may be\b", "pressure and fatigue are"),
+    (r"\bthere may be\b", "there is"),
+    (r"\bmay require\b", "requires"),
+    (r"\bmay increase\b", "will increase"),
+    (r"\bmay be\b", "is"),
+    (r"\btry to\s+", ""),
+]
+
+
+def _direct(text: str) -> str:
+    for pattern, replacement in _DIRECT_PHRASES:
+        text = re.sub(pattern, replacement, text)
+    return text
+
+
 def apply_tone(frame: dict, tone: str) -> dict:
     toned = frame.copy()
 
     if tone == "direct":
-        toned["observation"] = toned["observation"].replace("may be ", "")
-        toned["mechanism"] = toned["mechanism"].replace("may be ", "")
-        toned["implication"] = toned["implication"].replace("may require ", "requires ")
-        toned["next_step"] = toned["next_step"].replace("try to ", "")
+        for key in ("observation", "mechanism", "implication", "next_step"):
+            toned[key] = _direct(toned[key])
         return toned
 
     if tone == "encouraging":

@@ -1,5 +1,6 @@
 # frame²mental
 
+[![CI](https://github.com/dualityframework-ux/frame2mental/actions/workflows/ci.yml/badge.svg)](https://github.com/dualityframework-ux/frame2mental/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
 
 > **Not medical advice.** frame²mental is a personal self-awareness tool, not a diagnostic tool and not a substitute for professional care. If you are in crisis in the US, call or text **988** (Suicide & Crisis Lifeline). If you are in immediate danger, call 911.
@@ -161,6 +162,17 @@ Future improvements may include:
 - notification reminders
 - AI-assisted reflections
 - encrypted personal data storage
+
+---
+
+# Tests
+
+```bash
+pip install pytest
+pytest -q
+```
+
+34 tests cover every frame branch, the three tones (including that the direct tone stays grammatical), the warning score and levels, early-warning trends, weekly and pattern summaries, journal keywords, reset plans, check-in and settings storage, and that the 988 crisis line is always listed. GitHub Actions runs them on every push.
 
 ---
 
